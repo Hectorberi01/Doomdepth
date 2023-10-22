@@ -74,7 +74,7 @@ int main()
         nbrAttaqueJoueur --;
         if(nbrAttaqueJoueur == 0){
             printf("vous avez atteint le nombre d'attaque autoriser");
-            goto tourmonstre; // non encore  implémenter 
+            //goto tourmonstre; // non encore  implémenter 
         }
         if(tabMonstre[i]->vie==0){
             printf("le monstre est mort");
