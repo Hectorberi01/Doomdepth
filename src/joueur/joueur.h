@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <SDL2/SDL.h>
+#include<SDL2/SDL_image.h>
 #include "../monstre/monstre.h"
 #include "../objet/objet.h"
 
@@ -26,13 +28,14 @@ typedef struct Joueur{
     int attaqueMax;      // Attaque maximale du joueur
     int defense;         // Niveau de défense du joueur
     int mana;
+    SDL_Texture* texture;
 }Joueur;
 
 void attaquerMonstre(Joueur *joueur, Monstre *monstre);
 
 void attaquerJoueur(Joueur *joueur);
 
-void  afficherObjet(struct Objet *objet, Joueur  *joueur);
+void  afficherObjet(struct Objet *objet, Joueur  *joueur, int nbr);
 
 Joueur initialiserJoueur(Joueur *joueur);
 

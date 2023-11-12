@@ -16,8 +16,25 @@
 #include <ctype.h>
 #include <string.h>
 #include <unistd.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
+#include "../monstre/monstre.h"
 #include "../joueur/joueur.h"
 #include "../objet/objet.h"
+
+
+#define NOIR      1
+#define ROUGE     2
+#define VERT      3
+#define ORANGE    4
+#define BLEU      5
+#define MAGENTA   6
+#define CYAN      7
+#define BLANC     8
+#define JAUNE     9
+
+void couleur_char(char c);
 
 // Prototype de la Fonction pour charger l'état du jeu depuis un fichier
 void chargerPartie(Joueur *joueur, struct Inventaire *inventaire, char *nomFichier);
@@ -28,5 +45,7 @@ void sauvegarderPartie(Joueur joueur, struct Inventaire inventaire, char *nomFic
 // Prototype pour afficher le menu
 void  afficherMenu();
 //oid move(int x, int y);
+
+void LancerPartie();
 
 #endif //PROJETS_FONCTIONS_H

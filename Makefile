@@ -9,13 +9,13 @@ CC = gcc
 LD = gcc
 
 # C flags
-CFLAGS = -Wall -lncurses
+CFLAGS = -Wall 
 # dependency-generation flags
-DEPFLAGS = -MMD -MP
+DEPFLAGS = -MMD -MP -lncurses
 # linker flags
 LDFLAGS = 
 # library flags
-LDLIBS = 
+LDLIBS = -lncurses -ltinfo -lSDL2-2.0 -lSDL2_image
 
 # build directories
 BIN = bin
@@ -30,11 +30,11 @@ OBJECTS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(wildcard $(SRC)/*.c))
 DEPENDS := $(OBJECTS:.o=.d)
 
 # compile C source
-COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) -c -o $@
+COMPILE.c = $(CC) -c -o $@
 # compile C++ source
 COMPILE.cxx = $(CXX) $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c -o $@
 # link objects
-LINK.o = $(LD) $(LDFLAGS) $(LDLIBS) $(OBJECTS) -o $@
+LINK.o = $(LD) -o $@ $(OBJECTS) $(LDFLAGS) $(LDLIBS) 
 
 .DEFAULT_GOAL = all
 
@@ -54,7 +54,7 @@ $(BIN):
 	mkdir -p $(BIN)
 
 $(OBJ)/%.o:	$(SRC)/%.c
-	$(COMPILE.c) $<
+	$(COMPILE.c) $< $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) 
 
 # force rebuild
 .PHONY: remake

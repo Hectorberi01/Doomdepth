@@ -8,7 +8,7 @@
  **************************************************************************************************/
 Objet genererObjet() {
     Objet objet;
-    char noms[5][50] = {"Epee", "Hache", "Arc", "Baton", "Dague"};
+    char *noms[9] = {"Epee", "Hache", "Arc", "Baton", "Dague","Armure","Bouclier","rage","Foudre"};
     strcpy(objet.nom, noms[rand() % 5]); // Sélectionne un nom aléatoire parmi la liste
     objet.pouvoir = rand() % 20 + 10;     // Pouvoir de l'objet entre 10 et 29
     return objet;

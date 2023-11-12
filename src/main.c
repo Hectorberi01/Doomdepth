@@ -1,144 +1,143 @@
-#include <stdio.h>
-//#include <stdsrc.h>
-#include <time.h>
-#include <stdio.h>
-#include <time.h>
-#include <string.h>
-#include "fonctions/fonctions.h"
-#include "joueur/joueur.h"
-#include "monstre/monstre.h"
-#include "objet/objet.h"
-#include "sort/sort.h"
-#include "fonctions/fonctions.c"
-#include "joueur/joueur.c"
-#include "objet/objet.c"
-#include "monstre/monstre.c"
+#include "main.h"
+
+
 int main()
 {
-    srand(time(NULL));    // Initialise le générateur de  nbrmonstres aléatoires avec l'heure actuelle
-    int choix;
-    afficherMenu();    // On affiche le menu
-    //move(5, 15);
-    printf("ENTRER VOTRE CHOIX : ");
-    scanf(" %d", &choix);
-    //getch();
-    if(choix == 1){
-        // Initialise le joueur
-        Joueur joueur;       
-        initialiserJoueur(&joueur);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION,3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION,3);
 
-        //afficher la barre de vie
-        afficherVie(&joueur);        
-        printf("\n");
-
-        // on génère l'arme de l'utilisateur
-        Objet objet = genererObjet();
-
-        // on affiche l'objet d'attaque ainsi que la puissance de l'arme
-        afficherObjet(&objet,&joueur);        
-        printf("attaque \n");
-
-        // DÉFINIR LE nbrmonstre DE MONSTRE
-        int nbrmonstre = rand()%10 + 4;
-        printf("nombre  de montre : %d \n", nbrmonstre);
-        
-        //Définir le nbrmonstre d'attaque du joueur
-        int nbrAttaqueJoueur = rand()%10 + 4;
-        printf("nombre  d'attaque de Sami est : %d \n",nbrAttaqueJoueur);
-
-        // initialiser les monstre
-        Monstre *tabMonstre[nbrmonstre];
-        printf("le tableau de monstre est créer\n");
-
-        //on enrégistre les monstre dans un tableau
-        for (int i = 0; i < nbrmonstre ; i++){
-            tabMonstre[i] = malloc(sizeof(Monstre));
-            *tabMonstre[i] = genererMonstre(); //*_monstre;
-        }
-        printf("tout les montre sont générer \n");
-
-        // affichage de chaque monstre
-        for (int i = 0; i < nbrmonstre ; i++){
-            printf("monstre %d \n", i);
-            printf("monstre vie : %d \n", tabMonstre[i]->vie);
-            printf("monstre défense : %d \n", tabMonstre[i]->defense);
-            printf("monstre attaque min : %d \n", tabMonstre[i]->attaqueMin);
-            printf("monstre attaque max : %d \n", tabMonstre[i]->attaqueMax);
-        }
-     // ON LANCE L'ATTAQUE 
-
-        int i = 0;
-        partie:
-        attaquerMonstre(&joueur,tabMonstre[i]);
-        
-        nbrAttaqueJoueur --;
-        if(nbrAttaqueJoueur == 0){
-            printf("vous avez atteint le nombre d'attaque autoriser");
-            //goto tourmonstre; // non encore  implémenter 
-        }
-        if(tabMonstre[i]->vie==0){
-            printf("le monstre est mort");
-        }else{
-            printf("le monstre n'est pas mort attaquer encore? 1 pour Oui et 0 pour Non\n");
-            int cont;
-            scanf("%d",&cont);
-            if(cont == 1){
-               goto partie; 
-            }  
-        }
-        /*
-        printf("voulez vous attaquer ? O pour oui et N pour non ");
-        char option; 
-        option  = getchar();
-        if(option=='o'||option=='O'){
-            i++;
-            goto partie;
-        }
-        goto partie;*/
-
+    if (SDL_Init(SDL_INIT_VIDEO) < 0){
+        printf("Ne peut pas initialiser SDL %s", SDL_GetError());
+        exit(1);
     }
-    if(choix == 2){
-        // on charge la partie
+     // Initialisation de SDL_image pour la gestion des images
+    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+        printf("SDL_image n'a pas pu s'initialiser! SDL_image Error: %s\n", IMG_GetError());
+        SDL_Quit();
+        return -1;
     }
 
-
-    // Génère un monstre aléatoire
-    /*
-    struct Monstre monstre1;
-    monstre1.vie = 50;
-    monstre1.attaqueMin = 8;
-    monstre1.attaqueMax = 15;
-    monstre1.defense = 3;
-
-    // Le joueur attaque le monstre
-    //attaquerJoueur(&joueur);
-    //attaquerMonstre(&joueur,&monstre1);
-
-    // Crée un inventaire vide pour le joueur
-    struct Inventaire inventaire;
-    inventaire.nbArmes = 0;
-    inventaire.nbArmures = 0;
-    inventaire.nbPotions = 0;
-
-    // Génère un objet aléatoire et l'ajoute à l'inventaire
-    struct Objet objet = genererObjet();
-    ajouterObjet(&inventaire, objet);
-
-    // Affiche le contenu de l'inventaire
-    printf("Inventaire du joueur :\n");
-    printf("Armes :\n");
-    for (int i = 0; i < inventaire.nbArmes; i++) {
-        printf("Nom : %s, Pouvoir : %d\n", inventaire.armes[i].nom, inventaire.armes[i].pouvoir);
+    // window principale
+    SDL_Window* window = SDL_CreateWindow("DoomDepthsC",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,1000,1000,SDL_WINDOW_OPENGL);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!window || renderer == NULL){
+        printf("Failed to init window %s", SDL_GetError());
+        SDL_DestroyWindow(window);IMG_Quit();SDL_Quit();
+        exit(1);
     }
-    printf("Armures :\n");
-    for (int i = 0; i < inventaire.nbArmures; i++) {
-        printf("Nom : %s, Pouvoir : %d\n", inventaire.armures[i].nom, inventaire.armures[i].pouvoir);
+    
+    // Effacer l'écran
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+    // Appelle la fonction de cartographie
+    cartographie(renderer);
+    SDL_Delay(15000);
+    
+
+    // Charger une image pour le personnage
+    SDL_Texture* JoueurTexture = NULL;
+    SDL_Surface* JoueurSurface = IMG_Load("./img/ho.png");
+    if (JoueurSurface == NULL) {
+        printf("Erreur lors du chargement de l'image du personnage : %s\n", IMG_GetError());
+    } else {
+        JoueurTexture = SDL_CreateTextureFromSurface(renderer, JoueurSurface);
+        if (JoueurTexture == NULL) {
+            printf("Erreur lors de la création de la texture du personnage : %s\n", SDL_GetError());
+        }
+        SDL_FreeSurface(JoueurSurface);
     }
-    printf("Potions :\n");
-    for (int i = 0; i < inventaire.nbPotions; i++) {
-        printf("Nom : %s, Pouvoir : %d\n", inventaire.potions[i].nom, inventaire.potions[i].pouvoir);
+
+    // Position du personnage
+    int characterX = 50;//SCREEN_WIDTH  - CHARACTER_SIZE ;
+    int characterY = 550;//SCREEN_HEIGHT  - CHARACTER_SIZE ;
+    int characterVelX = 0;
+    int characterVelY = 0;
+    // Ajouter d'autres personnages
+
+    puts("OpenGL Loared");
+    bool quit = false;
+    while (!quit){
+        SDL_Event event;
+        while (SDL_PollEvent(&event)){
+            switch (event.type){
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym){
+                        case SDLK_UP:
+                            characterVelY = -CHARACTER_SPEED;
+                            break;
+                        case SDLK_DOWN:
+                            characterVelY = CHARACTER_SPEED;
+                            break;
+                        case SDLK_LEFT:
+                            characterVelX  = -CHARACTER_SPEED;
+                            break;
+                        case SDLK_RIGHT:
+                            characterVelX  = CHARACTER_SPEED;
+                            break;
+                        default:break;
+                    }
+                case SDL_KEYUP:
+                    switch (event.key.keysym.sym) {
+                        case SDLK_UP:
+                        case SDLK_DOWN:
+                            //characterVelY = 0;
+                            //break;
+                        case SDLK_LEFT:
+                        case SDLK_RIGHT:
+                            //characterVelX = 0;
+                            //break;
+                    }
+                default: break;
+            }
+        }
+
+        // Mise à jour de la position du personnage en fonction de la vélocité
+        characterX += characterVelX;
+        characterY += characterVelY;
+
+        // Vérification des limites de la fenêtre
+        if (characterX < 0) {
+            characterX = 0;
+        }
+        if (characterY < 0) {
+            characterY = 0;
+        }
+        if (characterX > SCREEN_WIDTH ) {
+            characterX = SCREEN_WIDTH ;
+        }
+        if (characterY > SCREEN_HEIGHT - CHARACTER_SIZE) {
+            characterY = SCREEN_HEIGHT - CHARACTER_SIZE;
+        }
+
+         // Effacer l'écran
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderClear(renderer);
+
+        // Afficher le fond
+        // if (backgroundTexture != NULL) {
+        //     SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
+        // }
+
+        // Afficher le personnage
+        if (JoueurTexture != NULL) {
+            SDL_Rect characterRect = { characterX, characterY, CHARACTER_SIZE, CHARACTER_SIZE };
+            SDL_RenderCopy(renderer, JoueurTexture, NULL, &characterRect);
+        }
+        SDL_RenderPresent(renderer);
+
     }
-    */
+
+    // Libération des ressources
+   // SDL_DestroyTexture(backgroundTexture);
+    SDL_DestroyTexture(JoueurTexture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    IMG_Quit();
+    SDL_Quit();
+
     return 0;
 }
-

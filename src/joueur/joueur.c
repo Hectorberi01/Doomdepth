@@ -14,7 +14,6 @@
 void attaquerMonstre(Joueur *joueur,Monstre *monstre) {
     // Calcul des dégâts infligés au monstre
     int degats = rand() % (joueur->attaqueMax - joueur->attaqueMin + 1) + joueur->attaqueMin;
-
     degats -= monstre->defense;
     if (degats < 0) {
         degats = 0;  // Assurez que les dégâts ne sont pas négatifs
@@ -41,7 +40,9 @@ void afficherVie(Joueur *joueur){
     //move(5, 16);
     printf("VIE : ");
     for(int i = 0; i < joueur->vie; i++){
-        printf("\xB2");
+        couleur_char(VERT);
+        printf("#");
+        printf("\033[00m");
     }
 }
 
@@ -49,51 +50,18 @@ void afficherVie(Joueur *joueur){
  * // Fonction pour afficher les caractéristiques de l'objet générer
  **************************************************************************************************/
 
-void afficherObjet(Objet *objet, Joueur *joueur){
-    //move(5, 18);
-    printf("==================================================================================\n");
-    //move(5,19);
-    printf("|");
-    //move(11,19);
-    printf("ARME");
-    //move(22,19);
-    printf("|");
-    //move(28, 19);
-    printf("POUVOIR ARME");
-    //move(42,19);
-    printf("|");
-    //move(48, 19);
-    printf("ATTAQUE MIN");
-    //move(62,19);
-    printf("|");
-    //move(68, 19);
-    printf("ATTAQUE MAX");
-    //move(86,19);
-    printf("|");
-    //move(5,20);
-    printf("==================================================================================\n");
-    //move(5,21);
-    printf("|");
-    //move(11,21);
-    printf("%s",objet->nom);
-    //move(22,21);
-    printf("|");
-    //move(28, 21);
-    printf("%d",objet->pouvoir);
-    //move(42,21);
-    printf("|");
-    //move(48, 21);
-    printf("%d",joueur->attaqueMin);
-    //move(62,21);
-    printf("|");
-    //move(68, 21);
-    printf("%d",joueur->attaqueMax);
-    //move(86,21);
-    printf("|");
-    //
-    
-    
-    //move(5,22);
-    printf("==================================================================================\n");
+void afficherObjet(Objet *objet, Joueur *joueur, int nbr){
+    printf("\t ________________________________________________________________________________\n");
+    printf("\t|                                                                                |\n");
+    printf("\t  ARME                               %s\n",objet->nom);
+    printf("\t|                                                                                |\n");
+    printf("\t  POUVOIR ARME                       %d\n",objet->pouvoir);
+    printf("\t|                                                                                |\n");
+    printf("\t  ATTAQUE MIN                        %d\n",joueur->attaqueMin);
+    printf("\t|                                                                                |\n");
+    printf("\t  ATTAQUE MAX                        %d\n",joueur->attaqueMax);
+    printf("\t|                                                                                |\n");
+    printf("\t  TOTAL MONSTRE                      %d\n",nbr);
+    printf("\t|________________________________________________________________________________|\n");
 }
 

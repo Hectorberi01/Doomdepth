@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <ncurses.h>
 
 typedef struct Monstre {
     int vie;             // Points de vie du monstre

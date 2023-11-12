@@ -1,5 +1,6 @@
-obj/main.o: src/main.c src/fonctions/fonctions.h \
- src/fonctions/../joueur/joueur.h \
+obj/main.o: src/main.c src/main.h src/sdl/sdl.h src/sdl/sdl.c \
+ src/sdl/sdl.h src/fonctions/fonctions.h \
+ src/fonctions/../monstre/monstre.h src/fonctions/../joueur/joueur.h \
  src/fonctions/../joueur/../monstre/monstre.h \
  src/fonctions/../joueur/../objet/objet.h src/fonctions/../objet/objet.h \
  src/joueur/joueur.h src/monstre/monstre.h src/objet/objet.h \
@@ -9,7 +10,12 @@ obj/main.o: src/main.c src/fonctions/fonctions.h \
  src/joueur/../fonctions/fonctions.h src/objet/objet.c src/objet/objet.h \
  src/monstre/monstre.c src/monstre/monstre.h \
  src/monstre/../joueur/joueur.h
+src/main.h:
+src/sdl/sdl.h:
+src/sdl/sdl.c:
+src/sdl/sdl.h:
 src/fonctions/fonctions.h:
+src/fonctions/../monstre/monstre.h:
 src/fonctions/../joueur/joueur.h:
 src/fonctions/../joueur/../monstre/monstre.h:
 src/fonctions/../joueur/../objet/objet.h:

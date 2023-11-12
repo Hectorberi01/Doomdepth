@@ -13,7 +13,7 @@
 Monstre genererMonstre() {
     Monstre monstre;
     // Génération aléatoire des statistiques du monstre
-    monstre.vie = rand() % 100 + 50;        // Vie entre 50 et 149
+    monstre.vie = rand() % 51 + 50;        // Vie entre 50 ET 100 
     monstre.attaqueMin = rand() % 20 + 10;  // Attaque minimale entre 10 et 29
     monstre.attaqueMax = monstre.attaqueMin + rand() % 20; // Attaque maximale entre attaqueMin et attaqueMin + 19
     monstre.defense = rand() % 10;          // Défense entre 0 et 9
